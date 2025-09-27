@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Card from "@/components/ui/Card";
 import ImageModal from "@/components/ui/ImageModal";
@@ -31,12 +31,12 @@ type Journal = {
 export default function HistoryPage() {
 	const { data: session } = useSession();
 	const [journals, setJournals] = useState<Journal[]>([]);
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(true);
 	const [userId, setUserId] = useState<string | null>(null);
 	const [playingAudio, setPlayingAudio] = useState<string | null>(null);
 	const [selectedImage, setSelectedImage] = useState<{url: string, name: string, size: number} | null>(null);
 
-	const loadJournals = async () => {
+	const loadJournals = useCallback(async () => {
 		if (!session?.user?.email) return;
 		
 		setLoading(true);
@@ -57,24 +57,24 @@ export default function HistoryPage() {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [session]);
 
-	// Only load data when refresh button is clicked, not automatically
-	// useEffect(() => {
-	// 	loadJournals();
-	// }, [session]);
+	// Load data automatically when component mounts and when session changes
+	useEffect(() => {
+		loadJournals();
+	}, [loadJournals]);
 
 	// Refresh history when page becomes visible (e.g., after username change in another tab)
-	// useEffect(() => {
-	// 	const handleVisibilityChange = () => {
-	// 		if (!document.hidden && session?.user?.email) {
-	// 			loadJournals();
-	// 		}
-	// 	};
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (!document.hidden && session?.user?.email) {
+				loadJournals();
+			}
+		};
 
-	// 	document.addEventListener('visibilitychange', handleVisibilityChange);
-	// 	return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-	// }, [session]);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+	}, [loadJournals, session]);
 
 	const getMoodEmoji = (mood?: string) => {
 		const moodMap: Record<string, string> = {
@@ -252,14 +252,14 @@ export default function HistoryPage() {
 								<div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
 									<RefreshCw size={40} className="text-blue-600" />
 								</div>
-								<h3 className="text-2xl font-bold text-slate-800 mb-2">No journals loaded</h3>
-								<p className="text-lg text-slate-600 mb-6">Click the refresh button above to load your journal history, or start writing your first entry!</p>
+								<h3 className="text-2xl font-bold text-slate-800 mb-2">No journals available</h3>
+								<p className="text-lg text-slate-600 mb-6">You haven&apos;t written any journal entries yet. Start your journey by writing your first entry!</p>
 								<div className="flex gap-4 justify-center">
 									<button 
 										onClick={loadJournals}
 										className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
 									>
-										Load History
+										Refresh History
 									</button>
 									<button 
 										onClick={() => window.location.href = '/journal'}
