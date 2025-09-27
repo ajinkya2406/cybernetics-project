@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}
+
+/* Force navigation button spacing */
+.nav-button {
+  margin-right: 16px !important;
+  min-width: 140px !important;
+  min-height: 48px !important;
+  padding: 14px 20px !important;
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  border: 3px solid rgba(0, 0, 0, 0.25) !important;
+  text-align: center !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  gap: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.nav-button.last-button {
+  margin-right: 0 !important;
+}
+
+/* Additional text spacing for navbar buttons */
+.nav-button span {
+  padding: 2px 4px !important;
+  letter-spacing: 0.025em !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+.nav-button svg {
+  margin-right: 4px !important;
+  flex-shrink: 0 !important;
+}
+
+.nav-container {
+  gap: 16px !important;
+  justify-content: center !important;
+}
+
+/* Ensure dashboard content is visible below navbar */
+.dashboard-main {
+  padding-top: 120px !important;
+}
+
+/* Enhanced card spacing (no extra borders) */
+.navigation-cards {
+  margin-bottom: 48px !important;
+}
+
+.ai-content-section {
+  margin-top: 32px !important;
+}

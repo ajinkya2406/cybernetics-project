@@ -1,0 +1,4950 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      }
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CreateUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-createUser"
+      }
+    },
+    "UsersOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-usersOptions"
+      }
+    },
+    "GetUserByIdLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getUserById"
+      }
+    },
+    "UpdateUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-updateUser"
+      }
+    },
+    "UsersUpdateOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-usersUpdateOptions"
+      }
+    },
+    "LogoutLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-logout"
+      }
+    },
+    "CreateJournalLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-createJournal"
+      }
+    },
+    "JournalsOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-journalsOptions"
+      }
+    },
+    "GetJournalsByUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getJournalsByUser"
+      }
+    },
+    "GetJournalsByEmailLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getJournalsByEmail"
+      }
+    },
+    "GetAnonymousJournalsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getAnonymousJournals"
+      }
+    },
+    "GetLatestJournalLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getLatestJournal"
+      }
+    },
+    "UpdateJournalLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-updateJournal"
+      }
+    },
+    "DeleteJournalLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-deleteJournal"
+      }
+    },
+    "AddMoodLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-addMood"
+      }
+    },
+    "MoodsOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-moodsOptions"
+      }
+    },
+    "GetMoodTrendsByUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getMoodTrendsByUser"
+      }
+    },
+    "GetAllMoodsByUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getAllMoodsByUser"
+      }
+    },
+    "GetAllMoodsByUserOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getAllMoodsByUserOptions"
+      }
+    },
+    "UpdateMoodLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-updateMood"
+      }
+    },
+    "GetLatestMoodLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getLatestMood"
+      }
+    },
+    "AddInteractionLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-addInteraction"
+      }
+    },
+    "InteractionsOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-interactionsOptions"
+      }
+    },
+    "GetInteractionsByJournalLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getInteractionsByJournal"
+      }
+    },
+    "GetInteractionsByUserLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getInteractionsByUser"
+      }
+    },
+    "GetInteractionsForJournalsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getInteractionsForJournals"
+      }
+    },
+    "InteractionsJournalsOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-interactionsJournalsOptions"
+      }
+    },
+    "UploadFileLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-uploadFile"
+      }
+    },
+    "UploadFilesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-uploadFiles"
+      }
+    },
+    "FilesOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-filesOptions"
+      }
+    },
+    "FilesMultipleOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-filesMultipleOptions"
+      }
+    },
+    "GetWellnessTipLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getWellnessTip"
+      }
+    },
+    "GetMotivationalQuoteLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-getMotivationalQuote"
+      }
+    },
+    "GeminiOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-geminiOptions"
+      }
+    },
+    "GeminiQuoteOptionsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/mindshare-backend-fresh-dev-geminiQuoteOptions"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "mindshare-backend-fresh",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup",
+                    "logs:TagResource"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/mindshare-backend-fresh-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/mindshare-backend-fresh-dev*:*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:Query",
+                    "dynamodb:Scan",
+                    "dynamodb:GetItem",
+                    "dynamodb:PutItem",
+                    "dynamodb:UpdateItem",
+                    "dynamodb:DeleteItem"
+                  ],
+                  "Resource": [
+                    "arn:aws:dynamodb:us-east-1:*:table/Users",
+                    "arn:aws:dynamodb:us-east-1:*:table/Journals",
+                    "arn:aws:dynamodb:us-east-1:*:table/Moods",
+                    "arn:aws:dynamodb:us-east-1:*:table/Interactions"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject",
+                    "s3:DeleteObject"
+                  ],
+                  "Resource": "arn:aws:s3:::mindshare-attachments/*"
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "mindshare-backend-fresh",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "CreateUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.createUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-createUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CreateUserLogGroup"
+      ]
+    },
+    "UsersOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-usersOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UsersOptionsLogGroup"
+      ]
+    },
+    "GetUserByIdLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.getUserById",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getUserById",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetUserByIdLogGroup"
+      ]
+    },
+    "UpdateUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.updateUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-updateUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UpdateUserLogGroup"
+      ]
+    },
+    "UsersUpdateOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-usersUpdateOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UsersUpdateOptionsLogGroup"
+      ]
+    },
+    "LogoutLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/users/index.logout",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-logout",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LogoutLogGroup"
+      ]
+    },
+    "CreateJournalLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.createJournal",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-createJournal",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "CreateJournalLogGroup"
+      ]
+    },
+    "JournalsOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-journalsOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "JournalsOptionsLogGroup"
+      ]
+    },
+    "GetJournalsByUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.getJournalsByUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getJournalsByUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetJournalsByUserLogGroup"
+      ]
+    },
+    "GetJournalsByEmailLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.getJournalsByEmail",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getJournalsByEmail",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetJournalsByEmailLogGroup"
+      ]
+    },
+    "GetAnonymousJournalsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.getAnonymousJournals",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getAnonymousJournals",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAnonymousJournalsLogGroup"
+      ]
+    },
+    "GetLatestJournalLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.getLatestJournal",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getLatestJournal",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetLatestJournalLogGroup"
+      ]
+    },
+    "UpdateJournalLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.updateJournal",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-updateJournal",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UpdateJournalLogGroup"
+      ]
+    },
+    "DeleteJournalLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/journals/index.deleteJournal",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-deleteJournal",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "DeleteJournalLogGroup"
+      ]
+    },
+    "AddMoodLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.addMood",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-addMood",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AddMoodLogGroup"
+      ]
+    },
+    "MoodsOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-moodsOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "MoodsOptionsLogGroup"
+      ]
+    },
+    "GetMoodTrendsByUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.getMoodTrendsByUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getMoodTrendsByUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetMoodTrendsByUserLogGroup"
+      ]
+    },
+    "GetAllMoodsByUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.getAllMoodsByUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getAllMoodsByUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAllMoodsByUserLogGroup"
+      ]
+    },
+    "GetAllMoodsByUserOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getAllMoodsByUserOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetAllMoodsByUserOptionsLogGroup"
+      ]
+    },
+    "UpdateMoodLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.updateMood",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-updateMood",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UpdateMoodLogGroup"
+      ]
+    },
+    "GetLatestMoodLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/moods/index.getLatestMood",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getLatestMood",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetLatestMoodLogGroup"
+      ]
+    },
+    "AddInteractionLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.addInteraction",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-addInteraction",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "AddInteractionLogGroup"
+      ]
+    },
+    "InteractionsOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-interactionsOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "InteractionsOptionsLogGroup"
+      ]
+    },
+    "GetInteractionsByJournalLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.getInteractionsByJournal",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getInteractionsByJournal",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetInteractionsByJournalLogGroup"
+      ]
+    },
+    "GetInteractionsByUserLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.getInteractionsByUser",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getInteractionsByUser",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetInteractionsByUserLogGroup"
+      ]
+    },
+    "GetInteractionsForJournalsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.getInteractionsForJournals",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getInteractionsForJournals",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetInteractionsForJournalsLogGroup"
+      ]
+    },
+    "InteractionsJournalsOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/interactions/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-interactionsJournalsOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "InteractionsJournalsOptionsLogGroup"
+      ]
+    },
+    "UploadFileLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/files/index.uploadSingleFile",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-uploadFile",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UploadFileLogGroup"
+      ]
+    },
+    "UploadFilesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/files/index.uploadMultipleFiles",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-uploadFiles",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "UploadFilesLogGroup"
+      ]
+    },
+    "FilesOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/files/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-filesOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "FilesOptionsLogGroup"
+      ]
+    },
+    "FilesMultipleOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/files/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-filesMultipleOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "FilesMultipleOptionsLogGroup"
+      ]
+    },
+    "GetWellnessTipLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/gemini/index.getWellnessTip",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getWellnessTip",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetWellnessTipLogGroup"
+      ]
+    },
+    "GetMotivationalQuoteLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/gemini/index.getMotivationalQuote",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-getMotivationalQuote",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetMotivationalQuoteLogGroup"
+      ]
+    },
+    "GeminiOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/gemini/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-geminiOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GeminiOptionsLogGroup"
+      ]
+    },
+    "GeminiQuoteOptionsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/mindshare-backend-fresh/dev/1759001287440-2025-09-27T19:28:07.440Z/mindshare-backend-fresh.zip"
+        },
+        "Handler": "functions/gemini/index.options",
+        "Runtime": "nodejs20.x",
+        "FunctionName": "mindshare-backend-fresh-dev-geminiQuoteOptions",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "USERS_TABLE": "Users",
+            "JOURNALS_TABLE": "Journals",
+            "MOODS_TABLE": "Moods",
+            "INTERACTIONS_TABLE": "Interactions"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GeminiQuoteOptionsLogGroup"
+      ]
+    },
+    "CreateUserLambdaVersiony8IFOjIF8DPetWjqgGhIrBWvyX90IKAAQNYnSoeI6s": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UsersOptionsLambdaVersion87LbA9AK1rBGbkd2dsjB5CU3Czk6DH2R94TKq5tgw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UsersOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetUserByIdLambdaVersionFLzBPhWg0HNmAkoXxZ91KJITSpwkrpJXR1ExFqvV7U": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetUserByIdLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UpdateUserLambdaVersionqR4yq5vUyu2PylVvYwcVtLcxEtiOyhQNvuFJVQNTo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UpdateUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UsersUpdateOptionsLambdaVersionCgZh34qAd7seeIGlLxO777EQcvq2tm6gYwhTdj1szg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UsersUpdateOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "LogoutLambdaVersionpjBbEfH1JgHoKpWiOsqxJvZlZrrV1NumqyWJdjNI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LogoutLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "CreateJournalLambdaVersiontMlKMbYwo3OJlBXKaJDdM08nDQp5H4NeVnXtFs2hw6o": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "CreateJournalLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "JournalsOptionsLambdaVersionWZS0R8dYy8UmxgYBxZTqWY1YxgXMP7GYDalEST3Ro": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "JournalsOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetJournalsByUserLambdaVersionU9W38DTwcceM2VJCKh536qx2Jy4WNYyznrHoF91QpgY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetJournalsByUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetJournalsByEmailLambdaVersionJZFTe3iRK3Wo2G53s45CYtbCleuEPSpFVr11DWI": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetJournalsByEmailLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetAnonymousJournalsLambdaVersion9kcDAmFJVDK4KRkTR58a0f1QsrVh3PI0zFYNE0IuE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAnonymousJournalsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetLatestJournalLambdaVersionwbA0eKLpG9AAVHvQ4f03DaKWIbExDTfr01i8t0g2VU": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetLatestJournalLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UpdateJournalLambdaVersiontMvHJAkENhjoltBGOMRzX5HZz74oG7udI1DQ1Vv8yBs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UpdateJournalLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "DeleteJournalLambdaVersiond7gO3upPJh5s3mTr7l0f8TwGy6zFRFl6bWTLPFcq4s": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "DeleteJournalLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "AddMoodLambdaVersion5l2NkE6LH4IU5wwgXMvsaT4clBqjyATnZlsay9WOM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AddMoodLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "MoodsOptionsLambdaVersionDwBW9V8p4binZewijiV82l1eHZFuN1BYDxI2MJGrw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "MoodsOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetMoodTrendsByUserLambdaVersionLPsOcyLsDmZpdFMjTHbLFTusDyhuEDxJgOdCv5F4Ow": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetMoodTrendsByUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetAllMoodsByUserLambdaVersionTjkEVLZrRhKaARscgqTaSP1WJ2ptEmrw4hILG5UE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAllMoodsByUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetAllMoodsByUserOptionsLambdaVersionk5Ydt5y9q19uR92pSldDMNT64tSkUsfIihDkOMiZkDo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetAllMoodsByUserOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UpdateMoodLambdaVersion8GoimAtoR9mazJk4Wf9ROykbB46PCt2dYdfDW25yQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UpdateMoodLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetLatestMoodLambdaVersionxnJvDCaM2z3CyMwtqOShOt5ad2eWyjwIxDp8ovgsc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetLatestMoodLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "AddInteractionLambdaVersionCbTUer2gC5cE75onH96DRSFzbFvUPBjZgxaosUECg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AddInteractionLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "InteractionsOptionsLambdaVersionO1bUeHzEm9zNQGkeNP9ISd5vXFpI5sOoGLvXYY5Bxc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "InteractionsOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetInteractionsByJournalLambdaVersionl4g2ungATBZtrX5qNrJevHAwPKhl264ZSi61j168w": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetInteractionsByJournalLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetInteractionsByUserLambdaVersionseaId45H3XRkx8621uJpQ5xqUA1ykDemd54heVk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetInteractionsByUserLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetInteractionsForJournalsLambdaVersionpIhDV30c44UYDEVDmLI5XUSkL9gOtPnECKnIjVkfS8": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetInteractionsForJournalsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "InteractionsJournalsOptionsLambdaVersionIfAvrP89VsD4te9jQWflTy3tNTh3oGqvJZf2Kdjo9kQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "InteractionsJournalsOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UploadFileLambdaVersionu9P96GFuk95zTHo0ajQqm9rr1QzFIlaoNr7Zcq8u8M": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UploadFileLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "UploadFilesLambdaVersiongt8jWmgjjhjJwPqMwxiXO2WrNosslCjK6I5DnTQ4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UploadFilesLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "FilesOptionsLambdaVersionjI9kjvawWEyoovQ4CYeqfQYDsbul6JgafPH9IRkd8w": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FilesOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "FilesMultipleOptionsLambdaVersionP0HFDiQsWsZtz2PGqh2KrzpqYqzxPThk41lrqw4pWM": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "FilesMultipleOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetWellnessTipLambdaVersionAwbTfQEGVU7hnEf1Ld7Zcb0z5jPDJx2MVBp2s": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetWellnessTipLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GetMotivationalQuoteLambdaVersionH8RfdF5nDTRBjXO71fIE1u1z4M0vkjK3lCFUb9zc4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetMotivationalQuoteLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GeminiOptionsLambdaVersionoLRnHGXGxrLjA2IEzcBBEpvqc3ohlp4u9Wq2BROVbZE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GeminiOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "GeminiQuoteOptionsLambdaVersionxCxfY3pjG5sl9aCrtofyeMRFdSisV1TkqxjPNweAei0": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GeminiQuoteOptionsLambdaFunction"
+        },
+        "CodeSha256": "0y4vvbRvSbslgvc83GuzmNchcHcpBOXcdq547uQEXyQ="
+      }
+    },
+    "HttpApi": {
+      "Type": "AWS::ApiGatewayV2::Api",
+      "Properties": {
+        "Name": "dev-mindshare-backend-fresh",
+        "ProtocolType": "HTTP"
+      }
+    },
+    "HttpApiStage": {
+      "Type": "AWS::ApiGatewayV2::Stage",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "StageName": "$default",
+        "AutoDeploy": true,
+        "DefaultRouteSettings": {
+          "DetailedMetricsEnabled": false
+        }
+      }
+    },
+    "CreateUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationCreateUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "CreateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiUsers": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/users",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationCreateUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationCreateUser"
+    },
+    "UsersOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UsersOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUsersOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UsersOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiUsers": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/users",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUsersOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUsersOptions"
+    },
+    "GetUserByIdLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetUserByIdLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetUserById": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetUserByIdLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiUsersUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/users/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetUserById"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetUserById"
+    },
+    "UpdateUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UpdateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUpdateUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UpdateUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePatchApiUsersUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PATCH /api/users/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUpdateUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUpdateUser"
+    },
+    "UsersUpdateOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UsersUpdateOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUsersUpdateOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UsersUpdateOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiUsersUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/users/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUsersUpdateOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUsersUpdateOptions"
+    },
+    "LogoutLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LogoutLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationLogout": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "LogoutLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiLogout": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/logout",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationLogout"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationLogout"
+    },
+    "CreateJournalLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "CreateJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationCreateJournal": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "CreateJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiJournals": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/journals",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationCreateJournal"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationCreateJournal"
+    },
+    "JournalsOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "JournalsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationJournalsOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "JournalsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiJournals": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/journals",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationJournalsOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationJournalsOptions"
+    },
+    "GetJournalsByUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetJournalsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetJournalsByUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetJournalsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiJournalsUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/journals/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetJournalsByUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetJournalsByUser"
+    },
+    "GetJournalsByEmailLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetJournalsByEmailLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetJournalsByEmail": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetJournalsByEmailLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiJournalsByDashemail": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/journals/by-email",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetJournalsByEmail"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetJournalsByEmail"
+    },
+    "GetAnonymousJournalsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAnonymousJournalsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetAnonymousJournals": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetAnonymousJournalsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiJournals": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/journals",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetAnonymousJournals"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetAnonymousJournals"
+    },
+    "GetLatestJournalLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetLatestJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetLatestJournal": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetLatestJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiJournalsLatest": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/journals/latest",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetLatestJournal"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetLatestJournal"
+    },
+    "UpdateJournalLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UpdateJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUpdateJournal": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UpdateJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePatchApiJournalsJournalidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PATCH /api/journals/{journalId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUpdateJournal"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUpdateJournal"
+    },
+    "DeleteJournalLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "DeleteJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationDeleteJournal": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "DeleteJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteDeleteApiJournalsJournalidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "DELETE /api/journals/{journalId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationDeleteJournal"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationDeleteJournal"
+    },
+    "AddMoodLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AddMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAddMood": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AddMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiMoods": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/moods",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAddMood"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAddMood"
+    },
+    "MoodsOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "MoodsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationMoodsOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "MoodsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiMoods": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/moods",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationMoodsOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationMoodsOptions"
+    },
+    "GetMoodTrendsByUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetMoodTrendsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetMoodTrendsByUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetMoodTrendsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiMoodsUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/moods/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetMoodTrendsByUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetMoodTrendsByUser"
+    },
+    "GetAllMoodsByUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAllMoodsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetAllMoodsByUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetAllMoodsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiMoodsAllUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/moods/all/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetAllMoodsByUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetAllMoodsByUser"
+    },
+    "GetAllMoodsByUserOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetAllMoodsByUserOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetAllMoodsByUserOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetAllMoodsByUserOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiMoodsAllUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/moods/all/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetAllMoodsByUserOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetAllMoodsByUserOptions"
+    },
+    "UpdateMoodLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UpdateMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUpdateMood": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UpdateMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePatchApiMoodsMoodidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "PATCH /api/moods/{moodId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUpdateMood"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUpdateMood"
+    },
+    "GetLatestMoodLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetLatestMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetLatestMood": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetLatestMoodLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiMoodsLatest": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/moods/latest",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetLatestMood"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetLatestMood"
+    },
+    "AddInteractionLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "AddInteractionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationAddInteraction": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "AddInteractionLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiInteractions": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/interactions",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationAddInteraction"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationAddInteraction"
+    },
+    "InteractionsOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "InteractionsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationInteractionsOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "InteractionsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiInteractions": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/interactions",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationInteractionsOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationInteractionsOptions"
+    },
+    "GetInteractionsByJournalLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetInteractionsByJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetInteractionsByJournal": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetInteractionsByJournalLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiInteractionsJournalJournalidVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/interactions/journal/{journalId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetInteractionsByJournal"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetInteractionsByJournal"
+    },
+    "GetInteractionsByUserLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetInteractionsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetInteractionsByUser": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetInteractionsByUserLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteGetApiInteractionsUserUseridVar": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "GET /api/interactions/user/{userId}",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetInteractionsByUser"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetInteractionsByUser"
+    },
+    "GetInteractionsForJournalsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetInteractionsForJournalsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetInteractionsForJournals": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetInteractionsForJournalsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiInteractionsJournals": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/interactions/journals",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetInteractionsForJournals"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetInteractionsForJournals"
+    },
+    "InteractionsJournalsOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "InteractionsJournalsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationInteractionsJournalsOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "InteractionsJournalsOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiInteractionsJournals": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/interactions/journals",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationInteractionsJournalsOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationInteractionsJournalsOptions"
+    },
+    "UploadFileLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UploadFileLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUploadFile": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UploadFileLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiFilesUpload": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/files/upload",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUploadFile"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUploadFile"
+    },
+    "UploadFilesLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "UploadFilesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationUploadFiles": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "UploadFilesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiFilesUploadDashmultiple": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/files/upload-multiple",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationUploadFiles"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationUploadFiles"
+    },
+    "FilesOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "FilesOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationFilesOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "FilesOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiFilesUpload": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/files/upload",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationFilesOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationFilesOptions"
+    },
+    "FilesMultipleOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "FilesMultipleOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationFilesMultipleOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "FilesMultipleOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiFilesUploadDashmultiple": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/files/upload-multiple",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationFilesMultipleOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationFilesMultipleOptions"
+    },
+    "GetWellnessTipLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetWellnessTipLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetWellnessTip": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetWellnessTipLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiGeminiWellnessDashtip": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/gemini/wellness-tip",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetWellnessTip"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetWellnessTip"
+    },
+    "GetMotivationalQuoteLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetMotivationalQuoteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGetMotivationalQuote": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GetMotivationalQuoteLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRoutePostApiGeminiMotivationalDashquote": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "POST /api/gemini/motivational-quote",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGetMotivationalQuote"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGetMotivationalQuote"
+    },
+    "GeminiOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GeminiOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGeminiOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GeminiOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiGeminiWellnessDashtip": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/gemini/wellness-tip",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGeminiOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGeminiOptions"
+    },
+    "GeminiQuoteOptionsLambdaPermissionHttpApi": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GeminiQuoteOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "HttpApi"
+              },
+              "/*"
+            ]
+          ]
+        }
+      }
+    },
+    "HttpApiIntegrationGeminiQuoteOptions": {
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "GeminiQuoteOptionsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "PayloadFormatVersion": "2.0",
+        "TimeoutInMillis": 30000
+      }
+    },
+    "HttpApiRouteOptionsApiGeminiMotivationalDashquote": {
+      "Type": "AWS::ApiGatewayV2::Route",
+      "Properties": {
+        "ApiId": {
+          "Ref": "HttpApi"
+        },
+        "RouteKey": "OPTIONS /api/gemini/motivational-quote",
+        "Target": {
+          "Fn::Join": [
+            "/",
+            [
+              "integrations",
+              {
+                "Ref": "HttpApiIntegrationGeminiQuoteOptions"
+              }
+            ]
+          ]
+        }
+      },
+      "DependsOn": "HttpApiIntegrationGeminiQuoteOptions"
+    },
+    "AttachmentsBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "mindshare-attachments",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": false,
+          "BlockPublicPolicy": false,
+          "IgnorePublicAcls": false,
+          "RestrictPublicBuckets": false
+        },
+        "CorsConfiguration": {
+          "CorsRules": [
+            {
+              "AllowedHeaders": [
+                "*"
+              ],
+              "AllowedMethods": [
+                "GET",
+                "PUT",
+                "POST",
+                "DELETE",
+                "HEAD"
+              ],
+              "AllowedOrigins": [
+                "*"
+              ],
+              "MaxAge": 3000
+            }
+          ]
+        }
+      }
+    },
+    "AttachmentsBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "AttachmentsBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": "s3:GetObject",
+              "Resource": {
+                "Fn::Sub": "arn:aws:s3:::${AttachmentsBucket}/*"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-ServerlessDeploymentBucketName"
+      }
+    },
+    "CreateUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateUserLambdaVersiony8IFOjIF8DPetWjqgGhIrBWvyX90IKAAQNYnSoeI6s"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-CreateUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "UsersOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UsersOptionsLambdaVersion87LbA9AK1rBGbkd2dsjB5CU3Czk6DH2R94TKq5tgw"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UsersOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetUserByIdLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetUserByIdLambdaVersionFLzBPhWg0HNmAkoXxZ91KJITSpwkrpJXR1ExFqvV7U"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetUserByIdLambdaFunctionQualifiedArn"
+      }
+    },
+    "UpdateUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UpdateUserLambdaVersionqR4yq5vUyu2PylVvYwcVtLcxEtiOyhQNvuFJVQNTo"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UpdateUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "UsersUpdateOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UsersUpdateOptionsLambdaVersionCgZh34qAd7seeIGlLxO777EQcvq2tm6gYwhTdj1szg"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UsersUpdateOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "LogoutLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "LogoutLambdaVersionpjBbEfH1JgHoKpWiOsqxJvZlZrrV1NumqyWJdjNI"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-LogoutLambdaFunctionQualifiedArn"
+      }
+    },
+    "CreateJournalLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "CreateJournalLambdaVersiontMlKMbYwo3OJlBXKaJDdM08nDQp5H4NeVnXtFs2hw6o"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-CreateJournalLambdaFunctionQualifiedArn"
+      }
+    },
+    "JournalsOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "JournalsOptionsLambdaVersionWZS0R8dYy8UmxgYBxZTqWY1YxgXMP7GYDalEST3Ro"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-JournalsOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetJournalsByUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetJournalsByUserLambdaVersionU9W38DTwcceM2VJCKh536qx2Jy4WNYyznrHoF91QpgY"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetJournalsByUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetJournalsByEmailLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetJournalsByEmailLambdaVersionJZFTe3iRK3Wo2G53s45CYtbCleuEPSpFVr11DWI"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetJournalsByEmailLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAnonymousJournalsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAnonymousJournalsLambdaVersion9kcDAmFJVDK4KRkTR58a0f1QsrVh3PI0zFYNE0IuE"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetAnonymousJournalsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetLatestJournalLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetLatestJournalLambdaVersionwbA0eKLpG9AAVHvQ4f03DaKWIbExDTfr01i8t0g2VU"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetLatestJournalLambdaFunctionQualifiedArn"
+      }
+    },
+    "UpdateJournalLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UpdateJournalLambdaVersiontMvHJAkENhjoltBGOMRzX5HZz74oG7udI1DQ1Vv8yBs"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UpdateJournalLambdaFunctionQualifiedArn"
+      }
+    },
+    "DeleteJournalLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "DeleteJournalLambdaVersiond7gO3upPJh5s3mTr7l0f8TwGy6zFRFl6bWTLPFcq4s"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-DeleteJournalLambdaFunctionQualifiedArn"
+      }
+    },
+    "AddMoodLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AddMoodLambdaVersion5l2NkE6LH4IU5wwgXMvsaT4clBqjyATnZlsay9WOM"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-AddMoodLambdaFunctionQualifiedArn"
+      }
+    },
+    "MoodsOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "MoodsOptionsLambdaVersionDwBW9V8p4binZewijiV82l1eHZFuN1BYDxI2MJGrw"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-MoodsOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetMoodTrendsByUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetMoodTrendsByUserLambdaVersionLPsOcyLsDmZpdFMjTHbLFTusDyhuEDxJgOdCv5F4Ow"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetMoodTrendsByUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAllMoodsByUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAllMoodsByUserLambdaVersionTjkEVLZrRhKaARscgqTaSP1WJ2ptEmrw4hILG5UE"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetAllMoodsByUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetAllMoodsByUserOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetAllMoodsByUserOptionsLambdaVersionk5Ydt5y9q19uR92pSldDMNT64tSkUsfIihDkOMiZkDo"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetAllMoodsByUserOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "UpdateMoodLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UpdateMoodLambdaVersion8GoimAtoR9mazJk4Wf9ROykbB46PCt2dYdfDW25yQ"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UpdateMoodLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetLatestMoodLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetLatestMoodLambdaVersionxnJvDCaM2z3CyMwtqOShOt5ad2eWyjwIxDp8ovgsc"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetLatestMoodLambdaFunctionQualifiedArn"
+      }
+    },
+    "AddInteractionLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "AddInteractionLambdaVersionCbTUer2gC5cE75onH96DRSFzbFvUPBjZgxaosUECg"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-AddInteractionLambdaFunctionQualifiedArn"
+      }
+    },
+    "InteractionsOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "InteractionsOptionsLambdaVersionO1bUeHzEm9zNQGkeNP9ISd5vXFpI5sOoGLvXYY5Bxc"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-InteractionsOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetInteractionsByJournalLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetInteractionsByJournalLambdaVersionl4g2ungATBZtrX5qNrJevHAwPKhl264ZSi61j168w"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetInteractionsByJournalLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetInteractionsByUserLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetInteractionsByUserLambdaVersionseaId45H3XRkx8621uJpQ5xqUA1ykDemd54heVk"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetInteractionsByUserLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetInteractionsForJournalsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetInteractionsForJournalsLambdaVersionpIhDV30c44UYDEVDmLI5XUSkL9gOtPnECKnIjVkfS8"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetInteractionsForJournalsLambdaFunctionQualifiedArn"
+      }
+    },
+    "InteractionsJournalsOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "InteractionsJournalsOptionsLambdaVersionIfAvrP89VsD4te9jQWflTy3tNTh3oGqvJZf2Kdjo9kQ"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-InteractionsJournalsOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "UploadFileLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UploadFileLambdaVersionu9P96GFuk95zTHo0ajQqm9rr1QzFIlaoNr7Zcq8u8M"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UploadFileLambdaFunctionQualifiedArn"
+      }
+    },
+    "UploadFilesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UploadFilesLambdaVersiongt8jWmgjjhjJwPqMwxiXO2WrNosslCjK6I5DnTQ4"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-UploadFilesLambdaFunctionQualifiedArn"
+      }
+    },
+    "FilesOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FilesOptionsLambdaVersionjI9kjvawWEyoovQ4CYeqfQYDsbul6JgafPH9IRkd8w"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-FilesOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "FilesMultipleOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "FilesMultipleOptionsLambdaVersionP0HFDiQsWsZtz2PGqh2KrzpqYqzxPThk41lrqw4pWM"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-FilesMultipleOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetWellnessTipLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetWellnessTipLambdaVersionAwbTfQEGVU7hnEf1Ld7Zcb0z5jPDJx2MVBp2s"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetWellnessTipLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetMotivationalQuoteLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetMotivationalQuoteLambdaVersionH8RfdF5nDTRBjXO71fIE1u1z4M0vkjK3lCFUb9zc4"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GetMotivationalQuoteLambdaFunctionQualifiedArn"
+      }
+    },
+    "GeminiOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GeminiOptionsLambdaVersionoLRnHGXGxrLjA2IEzcBBEpvqc3ohlp4u9Wq2BROVbZE"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GeminiOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "GeminiQuoteOptionsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GeminiQuoteOptionsLambdaVersionxCxfY3pjG5sl9aCrtofyeMRFdSisV1TkqxjPNweAei0"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-GeminiQuoteOptionsLambdaFunctionQualifiedArn"
+      }
+    },
+    "HttpApiId": {
+      "Description": "Id of the HTTP API",
+      "Value": {
+        "Ref": "HttpApi"
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-HttpApiId"
+      }
+    },
+    "HttpApiUrl": {
+      "Description": "URL of the HTTP API",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "HttpApi"
+            },
+            ".execute-api.",
+            {
+              "Ref": "AWS::Region"
+            },
+            ".",
+            {
+              "Ref": "AWS::URLSuffix"
+            }
+          ]
+        ]
+      },
+      "Export": {
+        "Name": "sls-mindshare-backend-fresh-dev-HttpApiUrl"
+      }
+    }
+  }
+}

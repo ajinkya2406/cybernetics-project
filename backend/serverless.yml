@@ -1,0 +1,283 @@
+service: mindshare-backend-fresh
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ${env:AWS_REGION}
+  environment:
+    USERS_TABLE: Users
+    JOURNALS_TABLE: Journals
+    MOODS_TABLE: Moods
+    INTERACTIONS_TABLE: Interactions
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - "arn:aws:dynamodb:${env:AWS_REGION}:*:table/Users"
+            - "arn:aws:dynamodb:${env:AWS_REGION}:*:table/Journals"
+            - "arn:aws:dynamodb:${env:AWS_REGION}:*:table/Moods"
+            - "arn:aws:dynamodb:${env:AWS_REGION}:*:table/Interactions"
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource: "arn:aws:s3:::mindshare-attachments/*"
+
+functions:
+  createUser:
+    handler: functions/users/index.createUser
+    events:
+      - httpApi:
+          path: /api/users
+          method: post
+  usersOptions:
+    handler: functions/users/index.options
+    events:
+      - httpApi:
+          path: /api/users
+          method: options
+  getUserById:
+    handler: functions/users/index.getUserById
+    events:
+      - httpApi:
+          path: /api/users/{userId}
+          method: get
+  updateUser:
+    handler: functions/users/index.updateUser
+    events:
+      - httpApi:
+          path: /api/users/{userId}
+          method: patch
+  usersUpdateOptions:
+    handler: functions/users/index.options
+    events:
+      - httpApi:
+          path: /api/users/{userId}
+          method: options
+  logout:
+    handler: functions/users/index.logout
+    events:
+      - httpApi:
+          path: /api/logout
+          method: post
+
+  createJournal:
+    handler: functions/journals/index.createJournal
+    events:
+      - httpApi:
+          path: /api/journals
+          method: post
+  journalsOptions:
+    handler: functions/journals/index.options
+    events:
+      - httpApi:
+          path: /api/journals
+          method: options
+  getJournalsByUser:
+    handler: functions/journals/index.getJournalsByUser
+    events:
+      - httpApi:
+          path: /api/journals/{userId}
+          method: get
+  getJournalsByEmail:
+    handler: functions/journals/index.getJournalsByEmail
+    events:
+      - httpApi:
+          path: /api/journals/by-email
+          method: get
+  getAnonymousJournals:
+    handler: functions/journals/index.getAnonymousJournals
+    events:
+      - httpApi:
+          path: /api/journals
+          method: get
+  getLatestJournal:
+    handler: functions/journals/index.getLatestJournal
+    events:
+      - httpApi:
+          path: /api/journals/latest
+          method: get
+  updateJournal:
+    handler: functions/journals/index.updateJournal
+    events:
+      - httpApi:
+          path: /api/journals/{journalId}
+          method: patch
+  deleteJournal:
+    handler: functions/journals/index.deleteJournal
+    events:
+      - httpApi:
+          path: /api/journals/{journalId}
+          method: delete
+
+  addMood:
+    handler: functions/moods/index.addMood
+    events:
+      - httpApi:
+          path: /api/moods
+          method: post
+  moodsOptions:
+    handler: functions/moods/index.options
+    events:
+      - httpApi:
+          path: /api/moods
+          method: options
+  getMoodTrendsByUser:
+    handler: functions/moods/index.getMoodTrendsByUser
+    events:
+      - httpApi:
+          path: /api/moods/{userId}
+          method: get
+  getAllMoodsByUser:
+    handler: functions/moods/index.getAllMoodsByUser
+    events:
+      - httpApi:
+          path: /api/moods/all/{userId}
+          method: get
+  getAllMoodsByUserOptions:
+    handler: functions/moods/index.options
+    events:
+      - httpApi:
+          path: /api/moods/all/{userId}
+          method: options
+  updateMood:
+    handler: functions/moods/index.updateMood
+    events:
+      - httpApi:
+          path: /api/moods/{moodId}
+          method: patch
+  getLatestMood:
+    handler: functions/moods/index.getLatestMood
+    events:
+      - httpApi:
+          path: /api/moods/latest
+          method: get
+
+  addInteraction:
+    handler: functions/interactions/index.addInteraction
+    events:
+      - httpApi:
+          path: /api/interactions
+          method: post
+  interactionsOptions:
+    handler: functions/interactions/index.options
+    events:
+      - httpApi:
+          path: /api/interactions
+          method: options
+  getInteractionsByJournal:
+    handler: functions/interactions/index.getInteractionsByJournal
+    events:
+      - httpApi:
+          path: /api/interactions/journal/{journalId}
+          method: get
+  getInteractionsByUser:
+    handler: functions/interactions/index.getInteractionsByUser
+    events:
+      - httpApi:
+          path: /api/interactions/user/{userId}
+          method: get
+  getInteractionsForJournals:
+    handler: functions/interactions/index.getInteractionsForJournals
+    events:
+      - httpApi:
+          path: /api/interactions/journals
+          method: post
+  interactionsJournalsOptions:
+    handler: functions/interactions/index.options
+    events:
+      - httpApi:
+          path: /api/interactions/journals
+          method: options
+
+  uploadFile:
+    handler: functions/files/index.uploadSingleFile
+    events:
+      - httpApi:
+          path: /api/files/upload
+          method: post
+  uploadFiles:
+    handler: functions/files/index.uploadMultipleFiles
+    events:
+      - httpApi:
+          path: /api/files/upload-multiple
+          method: post
+  filesOptions:
+    handler: functions/files/index.options
+    events:
+      - httpApi:
+          path: /api/files/upload
+          method: options
+  filesMultipleOptions:
+    handler: functions/files/index.options
+    events:
+      - httpApi:
+          path: /api/files/upload-multiple
+          method: options
+
+  # Gemini AI functions
+  getWellnessTip:
+    handler: functions/gemini/index.getWellnessTip
+    events:
+      - httpApi:
+          path: /api/gemini/wellness-tip
+          method: post
+  getMotivationalQuote:
+    handler: functions/gemini/index.getMotivationalQuote
+    events:
+      - httpApi:
+          path: /api/gemini/motivational-quote
+          method: post
+  geminiOptions:
+    handler: functions/gemini/index.options
+    events:
+      - httpApi:
+          path: /api/gemini/wellness-tip
+          method: options
+  geminiQuoteOptions:
+    handler: functions/gemini/index.options
+    events:
+      - httpApi:
+          path: /api/gemini/motivational-quote
+          method: options
+
+resources:
+  Resources:
+    AttachmentsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: mindshare-attachments
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          BlockPublicPolicy: false
+          IgnorePublicAcls: false
+          RestrictPublicBuckets: false
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ["*"]
+              AllowedMethods: [GET, PUT, POST, DELETE, HEAD]
+              AllowedOrigins: ["*"]
+              MaxAge: 3000
+    AttachmentsBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref AttachmentsBucket
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: !Sub "arn:aws:s3:::${AttachmentsBucket}/*"
+
+
+
