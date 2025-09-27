@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Button from "./Button";
 import { Eye, User, Lock, ArrowLeft } from "lucide-react";
 
 interface AnonymousModeProps {
@@ -32,7 +31,7 @@ export default function AnonymousMode({ onEnterAnonymous }: AnonymousModeProps) 
         <div>
           <h3 className="text-3xl font-bold text-white mb-4">Browse Anonymously</h3>
           <p className="text-white/80 text-base leading-relaxed max-w-sm mx-auto">
-            Explore the community feed without signing in. You can read posts but won't be able to like, comment, or create journals.
+            Explore the community feed without signing in. You can read posts but won&apos;t be able to like, comment, or create journals.
           </p>
         </div>
         
@@ -57,7 +56,7 @@ export default function AnonymousMode({ onEnterAnonymous }: AnonymousModeProps) 
         </div>
         <h3 className="text-2xl font-bold text-white mb-3">Choose Your Display Name</h3>
         <p className="text-white/80 text-base">
-          This is how you'll appear in the community (optional)
+          This is how you&apos;ll appear in the community (optional)
         </p>
       </div>
 

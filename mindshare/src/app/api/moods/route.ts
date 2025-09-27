@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 type Mood = { id: string; mood: string; note?: string; date: string; score: number };
-let MOODS: Mood[] = [
+const MOODS: Mood[] = [
 	{ id: "1", mood: "neutral", date: "2025-09-20", score: 3 },
 	{ id: "2", mood: "calm", date: "2025-09-21", score: 4 },
 	{ id: "3", mood: "happy", date: "2025-09-22", score: 5 },

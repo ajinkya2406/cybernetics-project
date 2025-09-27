@@ -32,7 +32,7 @@ export default function DashboardPage() {
 				try {
 					console.log("Creating/getting user for email:", session.user.email);
 					// Get or create user to get userId
-					const userResponse = await apiPost("/api/users", { 
+					const userResponse = await apiPost<{ data: { displayName: string; avatarUrl: string; userId: string; originalName?: string; anonymousName?: string } }>("/api/users", { 
 						email: session.user.email, 
 						displayName: session.user.name,
 						avatarUrl: session.user.image 
@@ -83,7 +83,7 @@ export default function DashboardPage() {
 			const recentMoods = allMoods.slice(0, 10); // Last 10 moods
 			
 			// Fetch wellness tip
-			const wellnessResponse = await apiPost("/api/gemini/wellness-tip", {
+			const wellnessResponse = await apiPost<{ data?: { tip: string; action: string; mood_insight: string } }>("/api/gemini/wellness-tip", {
 				moodData: recentMoods,
 				recentMoods: recentMoods.map(m => m.mood)
 			});
@@ -91,7 +91,7 @@ export default function DashboardPage() {
 			// Extract data from response structure
 			const wellnessData = wellnessResponse?.data || wellnessResponse;
 			// Ensure we're setting the data correctly
-			if (wellnessData && typeof wellnessData === 'object' && wellnessData.tip) {
+			if (wellnessData && typeof wellnessData === 'object' && 'tip' in wellnessData) {
 				console.log("Setting wellness tip:", wellnessData);
 				// Force state update
 				setWellnessTip(null);
@@ -109,7 +109,7 @@ export default function DashboardPage() {
 			}
 			
 			// Fetch motivational quote
-			const quoteResponse = await apiPost("/api/gemini/motivational-quote", {
+			const quoteResponse = await apiPost<{ data?: { quote: string; author: string; context: string } }>("/api/gemini/motivational-quote", {
 				moodData: recentMoods,
 				recentMoods: recentMoods.map(m => m.mood)
 			});
@@ -117,7 +117,7 @@ export default function DashboardPage() {
 			// Extract data from response structure
 			const quoteData = quoteResponse?.data || quoteResponse;
 			// Ensure we're setting the data correctly
-			if (quoteData && typeof quoteData === 'object' && quoteData.quote) {
+			if (quoteData && typeof quoteData === 'object' && 'quote' in quoteData) {
 				console.log("Setting motivational quote:", quoteData);
 				// Force state update
 				setMotivationalQuote(null);
@@ -291,7 +291,7 @@ export default function DashboardPage() {
 								<div className="flex-1">
 									<div className="flex items-center justify-between mb-6">
 										<div className="flex items-center gap-4">
-											<h3 className="text-2xl font-bold text-slate-800">Today's Wellness Tip</h3>
+											<h3 className="text-2xl font-bold text-slate-800">Today&apos;s Wellness Tip</h3>
 											<span className="text-sm bg-green-200 text-green-700 px-4 py-2 rounded-full font-semibold">AI Generated</span>
 										</div>
 										<button
@@ -321,7 +321,7 @@ export default function DashboardPage() {
 											</div>
 											{wellnessTip.mood_insight && (
 												<p className="text-base text-slate-600 italic leading-relaxed font-medium">
-													"{wellnessTip.mood_insight}"
+													&ldquo;{wellnessTip.mood_insight}&rdquo;
 												</p>
 											)}
 											{lastUpdated && (
@@ -366,7 +366,7 @@ export default function DashboardPage() {
 									{motivationalQuote ? (
 										<div className="space-y-6">
 											<blockquote className="text-slate-700 text-xl italic leading-relaxed font-medium">
-												"{motivationalQuote.quote || "No quote available"}"
+												&ldquo;{motivationalQuote.quote || "No quote available"}&rdquo;
 											</blockquote>
 											<div className="text-right">
 												<p className="text-base font-semibold text-slate-600">

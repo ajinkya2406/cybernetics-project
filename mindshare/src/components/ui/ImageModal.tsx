@@ -139,6 +139,7 @@ export default function ImageModal({ isOpen, onClose, imageUrl, imageName, image
           onMouseLeave={handleMouseUp}
           onWheel={handleWheel}
           draggable={false}
+          // eslint-disable-next-line @next/next/no-img-element
         />
 
         {/* Image info */}

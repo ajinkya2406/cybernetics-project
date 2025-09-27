@@ -19,7 +19,7 @@ export default function ProfilePage() {
 			
 			try {
 				// Get or create user first
-				const userResponse = await apiPost("/api/users", { 
+				const userResponse = await apiPost<{ data: { displayName: string; avatarUrl: string; userId: string; originalName?: string; anonymousName?: string } }>("/api/users", { 
 					email: session.user.email, 
 					displayName: session.user.name,
 					avatarUrl: session.user.image 
@@ -38,8 +38,8 @@ export default function ProfilePage() {
 		if (!user) return;
 		setLoading(true);
 		try {
-			const updatedUser = await apiPatch(`/api/users/${user.userId}`, { displayName: name });
-			setUser(updatedUser.data);
+		const updatedUser = await apiPatch<{ data: { displayName: string; avatarUrl: string; userId: string; originalName?: string; anonymousName?: string } }>(`/api/users/${user.userId}`, { displayName: name });
+		setUser(updatedUser.data);
 			toast.success("Display name updated!");
 		} catch (e: any) {
 			toast.error(e?.message ?? "Failed to update");

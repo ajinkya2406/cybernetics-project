@@ -10,7 +10,7 @@ type Journal = {
 	createdAt: number;
 };
 
-let JOURNALS: Journal[] = [];
+const JOURNALS: Journal[] = [];
 
 export async function POST(req: Request) {
 	const body = await req.json();

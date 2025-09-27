@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -59,7 +59,7 @@ export default function FeedPage() {
 	const [isAnonymous, setIsAnonymous] = useState(false);
 	const [loadingInteractions, setLoadingInteractions] = useState(false);
 
-	async function load() {
+	const load = useCallback(async () => {
 		setLoading(true);
 		try {
 			// Check if user is in anonymous mode (only when not logged in with Google)
@@ -95,7 +95,7 @@ export default function FeedPage() {
 		} finally {
 			setLoading(false);
 		}
-	}
+	}, [session]);
 
 	// Function to update interactions for a specific journal
 	const updateInteractionsForJournal = async (journalId: string) => {
@@ -113,22 +113,22 @@ export default function FeedPage() {
 		}
 	};
 
-	// Only load data when refresh button is clicked, not automatically
-	// useEffect(() => {
-	// 	load();
-	// }, [session]);
+	// Load data automatically when component mounts and when session changes
+	useEffect(() => {
+		load();
+	}, [load]);
 
 	// Refresh feed when page becomes visible (e.g., after username change in another tab)
-	// useEffect(() => {
-	// 	const handleVisibilityChange = () => {
-	// 		if (!document.hidden) {
-	// 			load();
-	// 		}
-	// 	};
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (!document.hidden) {
+				load();
+			}
+		};
 
-	// 	document.addEventListener('visibilitychange', handleVisibilityChange);
-	// 	return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
-	// }, []);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+	}, [load]);
 
 	const playAudio = (audioData: any) => {
 		if (playingAudio === audioData.journalId) {
@@ -350,14 +350,14 @@ export default function FeedPage() {
 								<div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
 									<Users size={40} className="text-blue-600" />
 								</div>
-								<h3 className="text-2xl font-bold text-slate-800 mb-2">No posts loaded</h3>
-								<p className="text-lg text-slate-600 mb-6">Click the refresh button above to load community posts, or be the first to share your thoughts!</p>
+								<h3 className="text-2xl font-bold text-slate-800 mb-2">No posts available</h3>
+								<p className="text-lg text-slate-600 mb-6">There are no community posts yet. Be the first to share your thoughts!</p>
 								<div className="flex gap-4 justify-center">
 									<button 
 										onClick={load}
 										className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
 									>
-										Load Posts
+										Refresh Posts
 									</button>
 									<button 
 										onClick={() => window.location.href = '/journal'}

@@ -39,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 				)}
 				{data.note && (
 					<div className="mt-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
-						<p className="text-sm text-slate-700 italic">"{data.note}"</p>
+						<p className="text-sm text-slate-700 italic">&ldquo;{data.note}&rdquo;</p>
 					</div>
 				)}
 				{data.id && (
@@ -71,7 +71,7 @@ export default function MoodPage() {
 			
 			try {
 				// Get or create user first
-				const userResponse = await apiPost("/api/users", { 
+				const userResponse = await apiPost<{ data: { userId: string } }>("/api/users", { 
 					email: session.user.email, 
 					displayName: session.user.name,
 					avatarUrl: session.user.image 
@@ -109,9 +109,9 @@ export default function MoodPage() {
 					journal: validMoods.filter(m => m.source === 'journal').length
 				});
 				
-				// Deduplicate by moodId to prevent duplicates
+				// Deduplicate by creating a unique key to prevent duplicates
 				const uniqueMoods = validMoods.reduce((acc, item) => {
-					const key = item.moodId || `mood_${item.date}_${item.mood}`;
+					const key = `mood_${item.date}_${item.mood}`;
 					if (!acc[key]) {
 						acc[key] = item;
 					} else {
@@ -197,14 +197,14 @@ export default function MoodPage() {
 				journal: validMoods.filter(m => m.source === 'journal').length
 			});
 			
-			// Deduplicate by moodId to prevent duplicates
-			const uniqueMoods = validMoods.reduce((acc, item) => {
-				const key = item.moodId || `mood_${item.date}_${item.mood}`;
-				if (!acc[key]) {
-					acc[key] = item;
-				} else {
-					console.log("Duplicate found:", key, item);
-				}
+		// Deduplicate by creating a unique key to prevent duplicates
+		const uniqueMoods = validMoods.reduce((acc, item) => {
+			const key = `mood_${item.date}_${item.mood}`;
+			if (!acc[key]) {
+				acc[key] = item;
+			} else {
+				console.log("Duplicate found:", key, item);
+			}
 				return acc;
 			}, {} as Record<string, any>);
 			
@@ -306,7 +306,7 @@ export default function MoodPage() {
 										<LineChart 
 											data={trend} 
 											margin={{ left: 20, right: 20, top: 20, bottom: 20 }}
-											key={`chart-${trend.length}-${trend[0]?.id || 'empty'}`}
+											key={`chart-${trend.length}-${trend[0]?.date || 'empty'}`}
 										>
 											<XAxis dataKey="date" hide />
 											<YAxis hide domain={[0, 5]} />

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 import Button from "./Button";
-import { X, User, Eye, EyeOff } from "lucide-react";
+import { X, User, Eye } from "lucide-react";
 import { apiPatch } from "@/lib/api";
 import toast from "react-hot-toast";
 
@@ -30,7 +30,6 @@ export default function UsernameModal({
   const [originalName, setOriginalName] = useState(userData?.originalName || currentUsername);
   const [anonymousName, setAnonymousName] = useState(userData?.anonymousName || `Anonymous_${Math.random().toString(36).substr(2, 9)}`);
   const [saving, setSaving] = useState(false);
-  const [showAnonymous, setShowAnonymous] = useState(false);
   const MAX_LENGTH = 50;
 
   useEffect(() => {
@@ -65,12 +64,13 @@ export default function UsernameModal({
       onUsernameChange(originalName.trim());
       toast.success("Names updated successfully!");
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Name update error:", error);
-      if (error?.message?.includes("CORS")) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      if (errorMessage.includes("CORS")) {
         toast.error("Network error. Please try again.");
       } else {
-        toast.error(error?.message || "Failed to update names");
+        toast.error(errorMessage || "Failed to update names");
       }
     } finally {
       setSaving(false);
@@ -113,7 +113,7 @@ export default function UsernameModal({
               maxLength={MAX_LENGTH}
             />
             <p className="text-xs text-slate-500 mt-1">
-              This name is only visible to you and won't appear in community posts.
+              This name is only visible to you and won&apos;t appear in community posts.
             </p>
           </div>
 

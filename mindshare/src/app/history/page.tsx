@@ -42,7 +42,7 @@ export default function HistoryPage() {
 		setLoading(true);
 		try {
 			// Get or create user first
-			const userResponse = await apiPost("/api/users", { 
+			const userResponse = await apiPost<{ data: { userId: string } }>("/api/users", { 
 				email: session.user.email, 
 				displayName: session.user.name,
 				avatarUrl: session.user.image 
